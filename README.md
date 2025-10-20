@@ -1,2 +1,2 @@
-# SAT-Codierung-des-Logikr-tsels-Dominosa
+# SAT-Codierung des Logikrätsels Dominosa
 Bachelor Projekt WS25/26 Dennis Hämmerle
