@@ -1,7 +1,9 @@
 from board import load_board
 
+Domino = tuple[tuple[int, int], tuple[int, int]]
 
-def generate_dominos(board: list[list[int]]) -> list[tuple[tuple[int, int], tuple[int, int]]]:
+
+def generate_dominos(board: list[list[int]]) -> list[Domino]:
     dominos = []
     rows, cols = len(board), len(board[0])
 
@@ -15,10 +17,10 @@ def generate_dominos(board: list[list[int]]) -> list[tuple[tuple[int, int], tupl
     return dominos
 
 
-def create_pair_map(dominos: list[tuple[tuple[int, int], tuple[int, int]]]) -> dict[tuple[int, int], list[tuple[tuple[int, int], tuple[int, int]]]]:
+def create_pair_map(dominos: list[Domino], board: list[list[int]]) -> dict[tuple[int, int], list[Domino]]:
     pair_to_dominos = {}
-    for x in range(len(board[0])):
-        for y in range(x, len(board[0])):
+    for x in range(len(board)):
+        for y in range(x, len(board)):
             pair_to_dominos[(x, y)] = []
 
     for domino in dominos:
@@ -30,7 +32,7 @@ def create_pair_map(dominos: list[tuple[tuple[int, int], tuple[int, int]]]) -> d
     return pair_to_dominos
 
 
-def create_cell_map(dominos: list[tuple[tuple[int, int], tuple[int, int]]]) -> dict[tuple[int, int], list[tuple[tuple[int, int], tuple[int, int]]]]:
+def create_cell_map(dominos: list[Domino], board: list[list[int]]) -> dict[tuple[int, int], list[Domino]]:
     cell_to_dominos = {}
     for row in range(len(board)):
         for col in range(len(board[0])):
@@ -44,14 +46,24 @@ def create_cell_map(dominos: list[tuple[tuple[int, int], tuple[int, int]]]) -> d
 
 
 if __name__ == "__main__":
-    board = load_board("../puzzles/dom03.txt")
-    print(board)
+    board = load_board("../puzzles/dom02.txt")
+    print(f"Board: {board}")
     print("")
+
     dominos = generate_dominos(board)
-    print(dominos)
+    var_map = {domino: index + 1 for index, domino in enumerate(dominos)}
+    print(f"Dominos: {dominos}")
     print("")
-    pair_map = create_pair_map(dominos)
-    print(pair_map)
+
+    pair_map = create_pair_map(dominos, board)
+    print("Pair map:")
+    for pair, result in pair_map.items():
+        mapped_result = [var_map[d] for d in result]
+        print(pair, mapped_result)
     print("")
-    cell_map = create_cell_map(dominos)
-    print(cell_map)
+
+    cell_map = create_cell_map(dominos, board)
+    print("Cell map:")
+    for cell, result in cell_map.items():
+        mapped_result = [var_map[d] for d in result]
+        print(cell, mapped_result)
