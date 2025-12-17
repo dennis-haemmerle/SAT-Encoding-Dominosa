@@ -19,11 +19,7 @@ def create_clauses(dominos: list[Domino], pair_map: dict[tuple[int, int], list[D
         if len(lits) == 1:
             clauses.append(lits)
         else:
-            # block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0)  # exactly one, pairwise encoding
-            # clauses.extend(block.clauses)
-            block = CardEnc.atmost(lits=lits, bound=1, vpool=vpool, encoding=0)
-            clauses.extend(block.clauses)
-            block = CardEnc.atleast(lits=lits, vpool=vpool, bound=1)
+            block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0)  # exactly one, pairwise encoding
             clauses.extend(block.clauses)
 
     for cell, dominos in cell_map.items():
@@ -31,10 +27,7 @@ def create_clauses(dominos: list[Domino], pair_map: dict[tuple[int, int], list[D
         if len(lits) == 1:
             clauses.append(lits)
         else:
-            # block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0,)  # exactly one, pairwise encoding
-            block = CardEnc.atmost(lits=lits, bound=1, vpool=vpool, encoding=0)
-            clauses.extend(block.clauses)
-            block = CardEnc.atleast(lits=lits, bound=1, vpool=vpool)
+            block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0,)  # exactly one, pairwise encoding
             clauses.extend(block.clauses)
 
     return clauses
@@ -53,6 +46,26 @@ def solve(clauses: list[list[int]]):
     if result:
         model = solver.get_model()
         print("Model:", model)
+        return model
+
+
+def check_solution(assignment, dominos: list[Domino], pair_map: dict[tuple[int, int], list[Domino]], cell_map: dict[tuple[int, int], list[Domino]]) -> bool:
+    vpool = IDPool()
+
+    for d in dominos:
+        vpool.id(d)
+
+    for pair, dominos in pair_map.items():
+        assigned = [d for d in dominos if vpool.id(d) in assignment]
+        if len(assigned) != 1:
+            return False
+
+    for cell, dominos in cell_map.items():
+        assigned = [d for d in dominos if vpool.id(d) in assignment]
+        if len(assigned) != 1:
+            return False
+
+    return True
 
 
 if __name__ == "__main__":
@@ -64,4 +77,6 @@ if __name__ == "__main__":
     clauses = create_clauses(dominos, pair_map, cell_map)
     print(clauses)
     print("")
-    solve(clauses)
+    assignment = solve(clauses)
+    check = check_solution(assignment, dominos, pair_map, cell_map)
+    print(f"Check: {check}")
