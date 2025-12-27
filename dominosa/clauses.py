@@ -8,6 +8,12 @@ Domino = tuple[tuple[int, int], tuple[int, int]]
 
 
 def create_clauses(dominos: list[Domino], pair_map: dict[tuple[int, int], list[Domino]], cell_map: dict[tuple[int, int], list[Domino]]) -> list[list[int]]:
+    """
+    Generate CNF clauses encoding the Dominosa constraints.
+
+    - Each value pair appears in exactly one domino.
+    - Each board cell is covered by exactly one domino.
+    """
     vpool = IDPool()
     clauses = []
 
@@ -34,6 +40,7 @@ def create_clauses(dominos: list[Domino], pair_map: dict[tuple[int, int], list[D
 
 
 def solve(clauses: list[list[int]]):
+    """Solve a CNF formula (list of clauses) using a SAT solver."""
     solver = Solver(name="Cadical195")
 
     for clause in clauses:
@@ -50,6 +57,11 @@ def solve(clauses: list[list[int]]):
 
 
 def check_solution(assignment, dominos: list[Domino], pair_map: dict[tuple[int, int], list[Domino]], cell_map: dict[tuple[int, int], list[Domino]]) -> bool:
+    """
+    Verify that a given SAT assignment satisfies all Dominosa constraints.
+
+    Checks that each value pair and each board cell is covered by exactly one selected domino.
+    """
     vpool = IDPool()
 
     for d in dominos:

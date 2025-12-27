@@ -4,6 +4,7 @@ Domino = tuple[tuple[int, int], tuple[int, int]]
 
 
 def generate_dominos(board: list[list[int]]) -> list[Domino]:
+    """Generate all possible horizontal and vertical domino placements for the given board."""
     dominos = []
     rows, cols = len(board), len(board[0])
 
@@ -18,6 +19,11 @@ def generate_dominos(board: list[list[int]]) -> list[Domino]:
 
 
 def create_pair_map(dominos: list[Domino], board: list[list[int]]) -> dict[tuple[int, int], list[Domino]]:
+    """
+    Map each unordered value pair (x, y) to all domino placements that cover cells with these values.
+
+    This mapping creates constraints to ensure each value pair appears in exactly one domino.
+    """
     pair_to_dominos = {}
     for x in range(len(board)):
         for y in range(x, len(board)):
@@ -33,6 +39,11 @@ def create_pair_map(dominos: list[Domino], board: list[list[int]]) -> dict[tuple
 
 
 def create_cell_map(dominos: list[Domino], board: list[list[int]]) -> dict[tuple[int, int], list[Domino]]:
+    """
+    Map each board cell to all domino placements that include it.
+
+    This mapping creates constraints to ensure that each cell is covered by exactly one domino.
+    """
     cell_to_dominos = {}
     for row in range(len(board)):
         for col in range(len(board[0])):
