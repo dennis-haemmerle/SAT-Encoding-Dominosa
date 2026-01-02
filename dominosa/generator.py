@@ -4,10 +4,14 @@ import random
 Domino = tuple[tuple[int, int], tuple[int, int]]
 
 
-def generate_board(n: int) -> list[list[int]]:
+def generate_board(n: int, error: bool = False) -> list[list[int]]:
     """Generate a complete Dominosa board of size n x (n+1)"""
     dominos = minimum_weight_perfect_matching(n)
     board = assign_dominos(n, dominos)
+
+    if error:
+        error_by_swap(board, dominos)
+
     return board
 
 
@@ -76,21 +80,6 @@ def minimum_weight_perfect_matching(n: int) -> list[Domino]:
 
     assert len(dominos) == N
 
-    # Initialize grid for ilustration
-    grid = [['.' for _ in range(n + 1)] for _ in range(n)]
-
-    # Place dominos on the grid
-    x = 0
-    for domino in dominos:
-        (r1, c1), (r2, c2) = domino
-        grid[r1][c1] = str(x)
-        grid[r2][c2] = str(x)
-        x += 1
-
-    # Print grid
-    for row in range(n):
-        print(' '.join(grid[row]))
-
     return dominos
 
 
@@ -117,6 +106,21 @@ def assign_dominos(n: int, dominos: list[Domino]) -> list[list[int]]:
 def is_black(row: int, col: int) -> bool:
     """Chessboard coloring to obtain a bipartite grid"""
     return (row + col) % 2 == 0
+
+
+def error_by_swap(board: list[list[int]], dominos: list[Domino]):
+    """Make the board unsolvable by swapping values between two different dominos."""
+    while True:
+        d1, d2 = random.sample(dominos, 2)
+
+        # take one cell from each domino
+        (r1, c1), _ = d1
+        (r2, c2), _ = d2
+
+        if board[r1][c1] != board[r2][c2]:
+            # swap the values
+            board[r1][c1], board[r2][c2] = board[r2][c2], board[r1][c1]
+            return
 
 
 if __name__ == "__main__":

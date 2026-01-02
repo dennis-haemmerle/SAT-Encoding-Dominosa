@@ -33,7 +33,7 @@ def create_clauses(dominos: list[Domino], pair_map: dict[tuple[int, int], list[D
         if len(lits) == 1:
             clauses.append(lits)
         else:
-            block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0,)  # exactly one, pairwise encoding
+            block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0)  # exactly one, pairwise encoding
             clauses.extend(block.clauses)
 
     return clauses
@@ -46,14 +46,13 @@ def solve(clauses: list[list[int]]):
     for clause in clauses:
         solver.add_clause(clause)
 
-    result = solver.solve()
-
-    print("SAT:", result)
-
-    if result:
-        model = solver.get_model()
-        print("Model:", model)
-        return model
+    try:
+        result = solver.solve()
+        if result:
+            return solver.get_model()
+        return None
+    finally:
+        solver.delete()
 
 
 def check_solution(assignment, dominos: list[Domino], pair_map: dict[tuple[int, int], list[Domino]], cell_map: dict[tuple[int, int], list[Domino]]) -> bool:
