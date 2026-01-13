@@ -22,7 +22,7 @@ def create_clauses(dominos: list[Domino], pair_map: dict[tuple[int, int], list[D
 
     for pair, dominos in pair_map.items():
         lits = [vpool.id(domino) for domino in dominos]
-        if len(lits) == 1:
+        if len(lits) <= 1:
             clauses.append(lits)
         else:
             block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0)  # exactly one, pairwise encoding
@@ -30,7 +30,7 @@ def create_clauses(dominos: list[Domino], pair_map: dict[tuple[int, int], list[D
 
     for cell, dominos in cell_map.items():
         lits = [vpool.id(domino) for domino in dominos]
-        if len(lits) == 1:
+        if len(lits) <= 1:
             clauses.append(lits)
         else:
             block = CardEnc.equals(lits=lits, vpool=vpool, encoding=0)  # exactly one, pairwise encoding
