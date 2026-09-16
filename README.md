@@ -1,6 +1,22 @@
 # SAT-Codierung des Logikrätsels Dominosa
 Bachelor Projekt WS25/26 Dennis Hämmerle
 
+## Dominosa Puzzle Game
+
+**Game board:** n * (n+1) grid filled with numbers from 0, ..., n-1 <br>
+**Goal:** Place dominoes on the grid to cover all cells so that each domino has a unique number pair <br>
+**Rules:**
+- Each Domino covers two cells (horizontally or vertically)
+- Each number pair appears only once
+- Every cell must be covered and dominoes can't overlap each other
+
+**Encoding Variables:**
+- All possible horizontal and vertical domino placements
+
+**Encoding Constraints:**
+- Each value pair appears in exactly one domino
+- Each board cell is covered by exactly one domino
+
 ## Random Domino Placement using Minimum Weight Perfect Matching
 
 First the dominosa board is colored like a chessboard, splitting the cells into two disjoint sets (black and white). Adjacent pairs of black and white cells correspond to possible domino placements and are represented as edges between the two sets, forming a bipartite graph.
