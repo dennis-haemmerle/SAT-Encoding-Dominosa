@@ -10,10 +10,12 @@ Bachelor Projekt WS25/26 Dennis Hämmerle
 - Each number pair appears only once
 - Every cell must be covered and dominoes can't overlap each other
 
-**Encoding Variables:**
+## Encoding
+
+**Variables:**
 - All possible horizontal and vertical domino placements
 
-**Encoding Constraints:**
+**Constraints:**
 - Each value pair appears in exactly one domino
 - Each board cell is covered by exactly one domino
 
